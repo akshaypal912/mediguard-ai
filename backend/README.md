@@ -1,30 +1,28 @@
-# Backend — APIs & Real-Time Server
+# MediGuardAI Backend
 
-## Goal
-Serve patient data, hospital/bed data, and connect frontend to the ML model.
+FastAPI backend for patient management, AI risk assessment, medication safety checks, and reports.
 
-## Setup
-```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install fastapi uvicorn sqlalchemy psycopg2-binary
+## Run
+
+```powershell
+cd backend
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python -m uvicorn app.main:app --reload
 ```
 
-## Suggested Endpoints
-| Method | Endpoint | Purpose |
-|---|---|---|
-| POST | `/patient` | Submit new patient vitals |
-| GET | `/patient/{id}/risk` | Get AI risk score for a patient |
-| GET | `/hospitals/nearby` | Get nearby hospitals with bed availability |
-| GET | `/dashboard/alerts` | Live feed for doctor dashboard (WebSocket) |
+Open http://127.0.0.1:8000/docs
 
-## Run (once app.py is built)
-```bash
-uvicorn app:app --reload
-```
+## API
 
-## Next Steps
-1. Design DB schema: `patients`, `hospitals`, `beds`
-2. Build CRUD APIs
-3. Connect to ML model's `/predict` endpoint
-4. Add WebSocket for real-time dashboard updates
+- GET `/health`
+- POST/GET `/api/patients`
+- GET `/api/patients/{patient_id}`
+- POST `/api/assessments`
+- GET `/api/assessments/patient/{patient_id}`
+- GET `/api/assessments/latest/{patient_id}`
+- POST `/api/medications/check`
+- GET `/api/reports/patient/{patient_id}`
+
+The trained model is loaded from `data/models/risk_model.joblib` when available. If it is missing, the API uses a transparent demo fallback based on submitted vital signs.
